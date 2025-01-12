@@ -1,5 +1,6 @@
-package com.kate.project.pages;
+package com.kate.project.web.pages;
 
+import com.kate.project.web.entities.User;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
@@ -17,12 +18,12 @@ public class LoginPage extends BasePage {
         loginButton = page.locator("button[type=submit]");
     }
 
-    public HomePage loginSuccess(String username, String password) {
-        logger.info("Log in with username: {} and password: {}", username, password);
-        usernameInput.fill(username);
-        passwordInput.fill(password);
+    public DashboardPage loginSuccess(User user) {
+        logger.info("Log in with username: {} and password: {}", user.getUsername(), user.getPassword());
+        usernameInput.fill(user.getUsername());
+        passwordInput.fill(user.getPassword());
         loginButton.click();
         assertThat(loginButton).isHidden();
-        return new HomePage(page);
+        return new DashboardPage(page);
     }
 }

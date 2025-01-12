@@ -1,6 +1,6 @@
-package com.kate.project.pages;
+package com.kate.project.web.pages;
 
-import com.kate.project.tiles.BuzzPostTile;
+import com.kate.project.web.tiles.BuzzPostTile;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
