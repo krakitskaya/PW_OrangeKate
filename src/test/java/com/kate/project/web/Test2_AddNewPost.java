@@ -11,7 +11,8 @@ public class Test2_AddNewPost extends BasePlaywrightTest {
 
     @Test
     void addNewPost() {
-        boolean isPostPresent = getLoginHelper().loginToBuzz()
+        boolean isPostPresent = getLoginHelper().loginSuccessfullyAsAdmin()
+                .navigateToBuzzPage()
                 .addNewPost(postText)
                 .isBuzzPostTilePresent(postText);
 

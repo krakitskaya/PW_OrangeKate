@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BasePlaywrightTest {
-    private PlaywrightUtils playwrightUtils;
     private BrowserContext context;
     private Page page;
     private LoginHelper loginHelper;
@@ -27,7 +26,7 @@ public class BasePlaywrightTest {
         logger = LoggerFactory.getLogger(this.getClass());
 
         // Initialize PlaywrightUtils
-        playwrightUtils = new PlaywrightUtils(Config.getBrowser(), false); // Adjust headless if needed
+        PlaywrightUtils playwrightUtils = new PlaywrightUtils(Config.getBrowser(), false); // Adjust headless if needed
 
         // Create new BrowserContext and Page
         context = playwrightUtils.getBrowser().newContext(new Browser.NewContextOptions().setViewportSize(WIDTH, HEIGHT));
@@ -59,11 +58,6 @@ public class BasePlaywrightTest {
         // Cleanup BrowserContext
         if (context != null) {
             context.close();
-        }
-
-        // Cleanup PlaywrightUtils
-        if (playwrightUtils != null) {
-            playwrightUtils.close();
         }
     }
 }
