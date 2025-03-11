@@ -21,7 +21,7 @@ public abstract class BaseApiClient {
                 .baseUri(baseUri)
                 .header("Content-Type", "application/json")
                 .cookie("orangehrm", sessionCookie)
-                .log().all();
+                .log().body();
     }
 
     protected Response sendRequest(Method method, String endpoint, Object body) {
@@ -42,8 +42,8 @@ public abstract class BaseApiClient {
             };
 
             response.then()
-                    .statusCode(200)
-                    .log().all();
+                    .log().body()
+                    .statusCode(200);
 
             return response;
         } catch (Exception e) {

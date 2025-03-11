@@ -1,8 +1,6 @@
 package com.kate.project.helpers;
 
-import com.kate.project.api.client.LoginApiClient;
 import com.kate.project.api.client.BuzzApiClient;
-import com.kate.project.api.client.ValidateAuthApiClient;
 import lombok.Getter;
 
 public class ApiClientFactory {
@@ -16,7 +14,6 @@ public class ApiClientFactory {
     }
 
     private String generateSessionCookie() {
-        String loginToken = new LoginApiClient(BASE_URI).getTokenFromLoginPage();
-        return new ValidateAuthApiClient(BASE_URI, loginToken).getSessionCookie();
+        return new CookieHelper(BASE_URI).getCookieAfterLogin();
     }
 }

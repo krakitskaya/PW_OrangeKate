@@ -10,11 +10,13 @@ public class BuzzApiClient extends BaseApiClient {
         super(baseUri + NEW_BUZZ_POST_CLIENT_URL, sessionCookie);
     }
 
-    public void createNewPost(String text, String type) {
-        sendRequest(Method.POST, "/buzz/posts", new PostNewBuzzRequestDto(text, type));
+    public int createNewPost(String text, String type) {
+        return sendRequest(Method.POST, "/buzz/posts", new PostNewBuzzRequestDto(text, type))
+                .jsonPath()
+                .getInt("data.post.id");
     }
 
-    public void deletePost(String postId) {
-        sendRequest(Method.DELETE, "/buzz/posts/" + postId, null);
+    public void deletePost(int postId) {
+        sendRequest(Method.DELETE, "/buzz/shares/" + postId, null);
     }
 }

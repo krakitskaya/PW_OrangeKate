@@ -1,10 +1,8 @@
 package com.kate.project.api;
 
-import com.kate.project.helpers.ApiClientFactory;
 import org.junit.jupiter.api.Test;
 
-public class Test1_Api_CreateNewPost {
-    private final ApiClientFactory apiClientFactory = new ApiClientFactory();
+public class Test1_Api_AddNewPost extends BaseApiTest {
 
     @Test
     public void testPostEndpoint() {
