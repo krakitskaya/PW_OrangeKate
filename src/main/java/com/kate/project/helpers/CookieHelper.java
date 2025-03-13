@@ -8,13 +8,9 @@ import org.jsoup.nodes.Element;
 import static io.restassured.RestAssured.given;
 
 public class CookieHelper {
-    private final String baseUri;
+    private static final String baseUri = Config.get("BASE_URL");
 
-    public CookieHelper(String baseUri) {
-        this.baseUri = baseUri;
-    }
-
-    public String getCookieAfterLogin() {
+    public static String getCookieAfterLogin() {
 
         Response responseForLoginCall = given().baseUri(baseUri).log().all().get("auth/login");
         responseForLoginCall.then().log().all();
@@ -35,8 +31,8 @@ public class CookieHelper {
         Response responseForAuthCall = given().baseUri(baseUri)
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("_token", token)
-                .formParam("username", Config.get("username"))
-                .formParam("password", Config.get("password"))
+                .formParam("username", Config.get("adminUsername"))
+                .formParam("password", Config.get("adminPassword"))
                 .cookie("orangehrm", sessionCookie)
                 .log().all()
                 .post("auth/validate");

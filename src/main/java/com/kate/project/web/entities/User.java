@@ -8,4 +8,10 @@ import lombok.Getter;
 public class User {
     private String username;
     private String password;
+    private Integer userId;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

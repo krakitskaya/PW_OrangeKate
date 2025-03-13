@@ -4,10 +4,9 @@ import com.kate.project.api.client.dto.PostNewBuzzRequestDto;
 import io.restassured.http.Method;
 
 public class BuzzApiClient extends BaseApiClient {
-    private static final String NEW_BUZZ_POST_CLIENT_URL = "/api/v2";
 
-    public BuzzApiClient(String baseUri, String sessionCookie) {
-        super(baseUri + NEW_BUZZ_POST_CLIENT_URL, sessionCookie);
+    public BuzzApiClient(String sessionCookie) {
+        super(sessionCookie);
     }
 
     public int createNewPost(String text, String type) {

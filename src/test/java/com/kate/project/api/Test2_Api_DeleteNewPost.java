@@ -8,7 +8,7 @@ public class Test2_Api_DeleteNewPost extends BaseApiTest {
     private static final String postText = UUID.randomUUID().toString();
 
     @Test
-    public void testPostEndpoint() {
+    public void deleteNewPostApi() {
         int postId = apiClientFactory.getBuzzNewPostApiClient().createNewPost(postText, "text");
         apiClientFactory.getBuzzNewPostApiClient().deletePost(postId);
     }

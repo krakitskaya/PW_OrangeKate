@@ -6,6 +6,7 @@ import com.kate.project.web.pages.LoginPage;
 import com.microsoft.playwright.Page;
 
 public class LoginHelper {
+    public static final User ADMIN_USER = new User(Config.get("adminUsername"), Config.get("adminPassword"));
     private final Page page;
 
     public LoginHelper(Page page) {
@@ -13,7 +14,11 @@ public class LoginHelper {
     }
 
     public DashboardPage loginSuccessfullyAsAdmin() {
+        return loginSuccessfully(ADMIN_USER);
+    }
+
+    public DashboardPage loginSuccessfully(User user) {
         LoginPage loginPage = new LoginPage(page);
-        return loginPage.loginSuccess(new User(Config.get("username"), Config.get("password")));
+        return loginPage.loginSuccess(user);
     }
 }

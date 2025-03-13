@@ -8,7 +8,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 public class Test1_LoginPositiveTest extends BasePlaywrightTest {
 
     @Test
-    void testLogin() {
+    void loginPositive() {
         getLoginHelper().loginSuccessfullyAsAdmin();
         assertThat(new DashboardPage(getPage()).userMenuLocator).isVisible();
     }

@@ -1,27 +1,27 @@
 package com.kate.project.api.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kate.project.helpers.Config;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import static io.restassured.RestAssured.given;
 
 public abstract class BaseApiClient {
-    protected final String baseUri;
+    protected final String BASE_URI = Config.get("BASE_URL") + "/api/v2";
     protected final String sessionCookie;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    protected BaseApiClient(String baseUri, String sessionCookie) {
-        this.baseUri = baseUri;
+    protected BaseApiClient(String sessionCookie) {
         this.sessionCookie = sessionCookie;
     }
 
     protected RequestSpecification requestSpec() {
         return given()
-                .baseUri(baseUri)
+                .baseUri(BASE_URI)
                 .header("Content-Type", "application/json")
                 .cookie("orangehrm", sessionCookie)
-                .log().body();
+                .log().all();
     }
 
     protected Response sendRequest(Method method, String endpoint, Object body) {

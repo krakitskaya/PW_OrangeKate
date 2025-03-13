@@ -1,6 +1,6 @@
 package com.kate.project.web;
 
-import com.kate.project.helpers.ApiClientFactory;
+import com.kate.project.factory.ApiClientFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
