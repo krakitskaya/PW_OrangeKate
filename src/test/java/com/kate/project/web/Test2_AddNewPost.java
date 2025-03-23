@@ -1,8 +1,10 @@
 package com.kate.project.web;
 
+import com.kate.project.BasePlaywrightTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Test2_AddNewPost extends BasePlaywrightTest {

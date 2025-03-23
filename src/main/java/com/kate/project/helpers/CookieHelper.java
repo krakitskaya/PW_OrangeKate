@@ -1,5 +1,6 @@
 package com.kate.project.helpers;
 
+import com.kate.project.web.entities.User;
 import io.restassured.response.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,6 +12,11 @@ public class CookieHelper {
     private static final String baseUri = Config.get("BASE_URL");
 
     public static String getCookieAfterLogin() {
+        User admin = new User(Config.get("adminUsername"), Config.get("adminPassword"));
+        return getCookieAfterLogin(admin);
+    }
+
+    public static String getCookieAfterLogin(User user) {
 
         Response responseForLoginCall = given().baseUri(baseUri).log().all().get("auth/login");
         responseForLoginCall.then().log().all();
@@ -31,8 +37,8 @@ public class CookieHelper {
         Response responseForAuthCall = given().baseUri(baseUri)
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("_token", token)
-                .formParam("username", Config.get("adminUsername"))
-                .formParam("password", Config.get("adminPassword"))
+                .formParam("username", user.getUsername())
+                .formParam("password", user.getPassword())
                 .cookie("orangehrm", sessionCookie)
                 .log().all()
                 .post("auth/validate");

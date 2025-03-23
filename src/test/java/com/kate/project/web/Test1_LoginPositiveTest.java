@@ -1,5 +1,6 @@
 package com.kate.project.web;
 
+import com.kate.project.BasePlaywrightTest;
 import com.kate.project.web.pages.DashboardPage;
 import org.junit.jupiter.api.Test;
 

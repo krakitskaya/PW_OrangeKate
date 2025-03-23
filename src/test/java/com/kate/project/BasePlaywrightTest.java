@@ -1,8 +1,10 @@
-package com.kate.project.web;
+package com.kate.project;
 
+import com.kate.project.factory.ApiClientFactory;
 import com.kate.project.helpers.Config;
 import com.kate.project.helpers.LoginHelper;
 import com.kate.project.utils.PlaywrightUtils;
+import com.kate.project.web.entities.User;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
@@ -16,6 +18,7 @@ public class BasePlaywrightTest {
     private Page page;
     private LoginHelper loginHelper;
     protected Logger logger;
+    protected final ApiClientFactory defaultApiClientFactory = new ApiClientFactory();
 
     private static final String BASE_URL = Config.get("BASE_URL");
     private static final int WIDTH = Config.getInt("viewport.width");
@@ -46,6 +49,10 @@ public class BasePlaywrightTest {
 
     protected LoginHelper getLoginHelper() {
         return loginHelper;
+    }
+
+    protected ApiClientFactory getApiClientFactoryFor(User user) {
+        return new ApiClientFactory(user);
     }
 
     @AfterEach

@@ -20,11 +20,11 @@ public class UserHelper {
 
     private static User createUser(boolean isAdmin) throws JsonProcessingException {
         UserRequestDto requestDto = UserRequestFactory.createUserRequestDto(isAdmin);
-        CreatedUserDto responseDto = apiClientFactory.getUserApiClient().createNewUser(requestDto);
+        CreatedUserDto responseDto = apiClientFactory.getUserAdminApiClient().createNewUser(requestDto);
         return new User(requestDto.getUsername(), requestDto.getPassword(), responseDto.getId());
     }
 
     public static void deleteUserViaApi(User user) {
-        apiClientFactory.getUserApiClient().deleteUserById(user.getUserId());
+        apiClientFactory.getUserAdminApiClient().deleteUserById(user.getUserId());
     }
 }

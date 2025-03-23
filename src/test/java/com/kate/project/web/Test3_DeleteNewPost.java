@@ -1,5 +1,6 @@
 package com.kate.project.web;
 
+import com.kate.project.BasePlaywrightTest;
 import com.kate.project.factory.ApiClientFactory;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,7 @@ public class Test3_DeleteNewPost extends BasePlaywrightTest {
 
     @Test
     void deleteNewPost() {
-        apiClientFactory.getBuzzNewPostApiClient().createNewPost(postText, "text");
+        apiClientFactory.getBuzzApiClient().createNewPost(postText);
 
         boolean isPostPresent = getLoginHelper().loginSuccessfullyAsAdmin()
                 .navigateToBuzzPage()

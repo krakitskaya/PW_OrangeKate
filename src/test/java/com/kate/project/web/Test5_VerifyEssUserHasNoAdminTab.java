@@ -1,6 +1,7 @@
 package com.kate.project.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.kate.project.BasePlaywrightTest;
 import com.kate.project.helpers.UserHelper;
 import com.kate.project.web.entities.User;
 import org.junit.jupiter.api.Test;

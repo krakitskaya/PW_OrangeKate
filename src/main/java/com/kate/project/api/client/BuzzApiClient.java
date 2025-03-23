@@ -9,8 +9,8 @@ public class BuzzApiClient extends BaseApiClient {
         super(sessionCookie);
     }
 
-    public int createNewPost(String text, String type) {
-        return sendRequest(Method.POST, "/buzz/posts", new PostNewBuzzRequestDto(text, type))
+    public int createNewPost(String text) {
+        return sendRequest(Method.POST, "/buzz/posts", new PostNewBuzzRequestDto(text))
                 .jsonPath()
                 .getInt("data.post.id");
     }
