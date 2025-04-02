@@ -2,7 +2,6 @@ package com.kate.project.factory;
 
 import com.kate.project.api.client.BuzzApiClient;
 import com.kate.project.api.client.UserAdminApiClient;
-import com.kate.project.helpers.CookieHelper;
 import com.kate.project.web.entities.User;
 import lombok.Getter;
 
@@ -17,15 +16,7 @@ public class ApiClientFactory {
     }
 
     public ApiClientFactory(User user) {
-        String sessionCookie = generateSessionCookie(user);
-        this.buzzApiClient = new BuzzApiClient(sessionCookie);
-        this.userAdminApiClient = new UserAdminApiClient(sessionCookie);
-    }
-
-    private String generateSessionCookie(User user) {
-        if (user == null) {
-            return CookieHelper.getCookieAfterLogin(); // default admin
-        }
-        return CookieHelper.getCookieAfterLogin(user);
+        this.buzzApiClient = new BuzzApiClient(user);
+        this.userAdminApiClient = new UserAdminApiClient(user);
     }
 }

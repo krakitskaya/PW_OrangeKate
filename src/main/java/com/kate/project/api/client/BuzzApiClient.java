@@ -1,12 +1,13 @@
 package com.kate.project.api.client;
 
 import com.kate.project.api.client.dto.PostNewBuzzRequestDto;
+import com.kate.project.web.entities.User;
 import io.restassured.http.Method;
 
 public class BuzzApiClient extends BaseApiClient {
 
-    public BuzzApiClient(String sessionCookie) {
-        super(sessionCookie);
+    public BuzzApiClient(User user) {
+        super(user);
     }
 
     public int createNewPost(String text) {

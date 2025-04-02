@@ -57,6 +57,7 @@ public class BuzzPage extends BasePage {
     }
 
     public boolean isBuzzPostTilePresent(String postText) {
+        page.waitForLoadState(LoadState.NETWORKIDLE);
         List<BuzzPostTile> buzzPostTiles = getBuzzPostTiles();
         return buzzPostTiles.stream()
                 .anyMatch(tile -> tile.getPostText().equals(postText));

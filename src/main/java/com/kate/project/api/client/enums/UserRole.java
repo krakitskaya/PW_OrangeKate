@@ -12,4 +12,13 @@ public enum UserRole {
     UserRole(Integer roleId) {
         this.roleId = roleId;
     }
+
+    public static UserRole fromRoleId(Integer roleId) {
+        for (UserRole role : values()) {
+            if (role.roleId.equals(roleId)) {
+                return role;
+            }
+        }
+        throw new IllegalArgumentException("Invalid roleId: " + roleId);
+    }
 }

@@ -6,22 +6,22 @@ import com.kate.project.helpers.UserHelper;
 import com.kate.project.web.entities.User;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class Test3_AddNewPost_EssUser extends BasePlaywrightTest {
+public class Test3_Api_AddNewPost_EssUser extends BasePlaywrightTest {
     private User essUser;
-
-    private static final String postText = "NewPost";
+    private static final String postText = UUID.randomUUID().toString();
 
     @Test
-    public void verifyEssUserHasNoAdminTab() throws JsonProcessingException {
+    public void addNewPostByEssUser() throws JsonProcessingException {
         try {
             essUser = UserHelper.createEssUserViaApi();
-            getApiClientFactoryFor(essUser).getBuzzApiClient().createNewPost("NewPost");
+            getApiClientFactoryFor(essUser).getBuzzApiClient().createNewPost(postText);
 
             boolean isPostPresent = getLoginHelper().loginSuccessfullyAsAdmin()
                     .navigateToBuzzPage()
-                    .addNewPost(postText)
                     .isBuzzPostTilePresent(postText);
 
             assertTrue(isPostPresent, "Post added successfully");

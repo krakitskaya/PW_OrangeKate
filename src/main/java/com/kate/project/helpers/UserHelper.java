@@ -21,7 +21,10 @@ public class UserHelper {
     private static User createUser(boolean isAdmin) throws JsonProcessingException {
         UserRequestDto requestDto = UserRequestFactory.createUserRequestDto(isAdmin);
         CreatedUserDto responseDto = apiClientFactory.getUserAdminApiClient().createNewUser(requestDto);
-        return new User(requestDto.getUsername(), requestDto.getPassword(), responseDto.getId());
+        return new User(requestDto.getUsername(),
+                requestDto.getPassword(),
+                responseDto.getId(),
+                UserRole.fromRoleId(responseDto.getUserRole().getId()));
     }
 
     public static void deleteUserViaApi(User user) {
