@@ -1,4 +1,4 @@
-package com.kate.project.api.client.entities;
+package com.kate.project.api.entities;
 
 import lombok.Data;
 

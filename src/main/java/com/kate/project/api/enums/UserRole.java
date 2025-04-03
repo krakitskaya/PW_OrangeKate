@@ -1,4 +1,4 @@
-package com.kate.project.api.client.enums;
+package com.kate.project.api.enums;
 
 import lombok.Getter;
 

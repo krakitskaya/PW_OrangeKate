@@ -1,23 +1,22 @@
 package com.kate.project.api;
 
-import com.kate.project.helpers.BuzzHelper;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-public class Test2_Api_DeleteNewPost_AdminUser extends BaseApiTest {
+public class Test4_AddNewPost_Negative_NoCookie extends BaseApiTest {
     private static final String postText = UUID.randomUUID().toString();
 
     @Test
-    public void deleteNewPostApi() {
-        int postId = BuzzHelper.createPostApi(postText);
-
+    public void addNewPostApi() {
         Response response = defaultApiClientFactory
                 .getBuzzApiClient()
-                .getDeletePostClient(postId)
+                .createPost(postText)
+                .prepareBuilder()
+                .removeCookie()
                 .send();
 
-        verifySuccess(response);
+        verifyUnauthorized(response);
     }
 }

@@ -18,7 +18,6 @@ public class BasePlaywrightTest {
     private Page page;
     private LoginHelper loginHelper;
     protected Logger logger;
-    protected final ApiClientFactory defaultApiClientFactory = new ApiClientFactory();
 
     private static final String BASE_URL = Config.get("BASE_URL");
     private static final int WIDTH = Config.getInt("viewport.width");

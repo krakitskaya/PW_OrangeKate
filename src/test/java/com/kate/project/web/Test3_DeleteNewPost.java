@@ -1,7 +1,7 @@
 package com.kate.project.web;
 
 import com.kate.project.BasePlaywrightTest;
-import com.kate.project.factory.ApiClientFactory;
+import com.kate.project.helpers.BuzzHelper;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -10,11 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class Test3_DeleteNewPost extends BasePlaywrightTest {
     private static final String postText = UUID.randomUUID().toString();
-    private final ApiClientFactory apiClientFactory = new ApiClientFactory();
 
     @Test
     void deleteNewPost() {
-        apiClientFactory.getBuzzApiClient().createNewPost(postText);
+        BuzzHelper.createPostApi(postText);
 
         boolean isPostPresent = getLoginHelper().loginSuccessfullyAsAdmin()
                 .navigateToBuzzPage()

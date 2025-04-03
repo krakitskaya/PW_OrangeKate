@@ -1,6 +1,6 @@
 package com.kate.project.web.entities;
 
-import com.kate.project.api.client.enums.UserRole;
+import com.kate.project.api.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

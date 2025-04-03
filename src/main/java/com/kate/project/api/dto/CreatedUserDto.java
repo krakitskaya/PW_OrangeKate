@@ -1,6 +1,6 @@
-package com.kate.project.api.client.dto;
+package com.kate.project.api.dto;
 
-import com.kate.project.api.client.entities.Employee;
+import com.kate.project.api.entities.Employee;
 import lombok.Data;
 
 @Data

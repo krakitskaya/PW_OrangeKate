@@ -1,7 +1,7 @@
 package com.kate.project.factory;
 
-import com.kate.project.api.client.dto.UserRequestDto;
-import com.kate.project.api.client.enums.UserRole;
+import com.kate.project.api.dto.UserRequestDto;
+import com.kate.project.api.enums.UserRole;
 import com.kate.project.helpers.Config;
 import org.apache.commons.lang3.RandomStringUtils;
 

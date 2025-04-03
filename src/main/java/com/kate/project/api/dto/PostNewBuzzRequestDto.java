@@ -1,4 +1,4 @@
-package com.kate.project.api.client.dto;
+package com.kate.project.api.dto;
 
 import lombok.Data;
 
