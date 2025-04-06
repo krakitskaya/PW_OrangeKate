@@ -1,22 +1,24 @@
 package com.kate.project.api;
 
-import io.restassured.response.Response;
+import com.kate.project.api.clients.BuzzApiClient;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Test1_Api_AddNewPost_AdminUser extends BaseApiTest {
     private static final String postText = UUID.randomUUID().toString();
 
     @Test
     public void addNewPostApi() {
-        Response response = defaultApiClientFactory
-                .getBuzzApiClient()
-                .createPost(postText)
-                .send();
+        BuzzApiClient buzzApi = defaultApiClientFactory
+                .getBuzzApiClient();
 
-        verifySuccess(response);
+        buzzApi.createPost(postText)
+                .sendAndExtractPostId();
+
+        assertTrue(buzzApi.getPostsClient().getPosts().stream()
+                .anyMatch(post -> postText.equals(post.getText())));
     }
 }
-
-//TODO getallPosts проверить что есть мой пост

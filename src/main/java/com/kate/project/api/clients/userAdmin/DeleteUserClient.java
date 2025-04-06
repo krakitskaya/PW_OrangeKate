@@ -2,13 +2,14 @@ package com.kate.project.api.clients.userAdmin;
 
 import com.kate.project.api.ApiContext;
 import com.kate.project.api.ApiRequestBuilder;
+import com.kate.project.api.interfaces.ResponseVerifier;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
 import java.util.List;
 import java.util.Map;
 
-public class DeleteUserClient {
+public class DeleteUserClient implements ResponseVerifier {
     private final ApiContext context;
     private final Integer userId;
     private final String endpoint = "/admin/users";
@@ -30,6 +31,6 @@ public class DeleteUserClient {
     }
 
     public void sendAndVerifySuccess() {
-        send().then().statusCode(200).log().body();
+        verifySuccess(send());
     }
 }

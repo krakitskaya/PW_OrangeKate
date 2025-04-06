@@ -4,10 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.kate.project.api.ApiContext;
 import com.kate.project.api.ApiRequestBuilder;
 import com.kate.project.api.dto.CreatedUserDto;
+import com.kate.project.api.interfaces.ResponseVerifier;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 
-public class CreateUserClient {
+public class CreateUserClient implements ResponseVerifier {
     private final ApiContext context;
     private final Object body;
     private final String endpoint = "/admin/users";
@@ -28,6 +29,7 @@ public class CreateUserClient {
 
     public CreatedUserDto sendAndExtractUser() {
         Response response = send();
+        verifySuccess(response);
         JsonNode dataNode = context.getObjectMapper().valueToTree(response.jsonPath().get("data"));
         try {
             return context.getObjectMapper().treeToValue(dataNode, CreatedUserDto.class);
