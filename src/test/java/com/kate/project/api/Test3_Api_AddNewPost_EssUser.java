@@ -1,6 +1,5 @@
 package com.kate.project.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kate.project.helpers.BuzzHelper;
 import com.kate.project.helpers.UserHelper;
 import com.kate.project.web.entities.User;
@@ -15,7 +14,7 @@ public class Test3_Api_AddNewPost_EssUser extends BaseApiTest {
     private static final String postText = UUID.randomUUID().toString();
 
     @Test
-    public void addNewPostByEssUser() throws JsonProcessingException {
+    public void addNewPostByEssUser() {
         try {
             essUser = UserHelper.createEssUserViaApi();
             BuzzHelper.createPostApi(essUser, postText);

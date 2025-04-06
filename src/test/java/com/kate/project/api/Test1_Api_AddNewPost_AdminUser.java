@@ -1,6 +1,6 @@
 package com.kate.project.api;
 
-import com.kate.project.api.clients.BuzzApiClient;
+import com.kate.project.helpers.BuzzHelper;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -12,13 +12,9 @@ public class Test1_Api_AddNewPost_AdminUser extends BaseApiTest {
 
     @Test
     public void addNewPostApi() {
-        BuzzApiClient buzzApi = defaultApiClientFactory
-                .getBuzzApiClient();
+        BuzzHelper.createPostApi(defaultApiClientFactory, postText);
 
-        buzzApi.createPost(postText)
-                .sendAndExtractPostId();
-
-        assertTrue(buzzApi.getPostsClient().getPosts().stream()
+        assertTrue(defaultApiClientFactory.getBuzzApiClient().getPostsClient().getPosts().stream()
                 .anyMatch(post -> postText.equals(post.getText())));
     }
 }

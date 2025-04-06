@@ -2,7 +2,8 @@ package com.kate.project.api.clients;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kate.project.api.ApiContext;
-import com.kate.project.helpers.Config;
+import com.kate.project.api.Config;
+import com.kate.project.api.enums.UserRole;
 import com.kate.project.web.entities.User;
 import io.restassured.response.Response;
 import org.jsoup.Jsoup;
@@ -22,7 +23,7 @@ public abstract class BaseApiClient {
     }
 
     private static String getCookieAfterLogin() {
-        User admin = new User(Config.get("adminUsername"), Config.get("adminPassword"));
+        User admin = new User(Config.get("adminUsername"), Config.get("adminPassword"), UserRole.ADMIN);
         return getCookieAfterLogin(admin);
     }
 

@@ -12,7 +12,7 @@ public class Test4_AddNewPost_Negative_NoCookie extends BaseApiTest {
     public void addNewPostApi() {
         Response response = defaultApiClientFactory
                 .getBuzzApiClient()
-                .createPost(postText)
+                .getCreatePostClient(postText)
                 .prepareBuilder()
                 .removeCookie()
                 .send();

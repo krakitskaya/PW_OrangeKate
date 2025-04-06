@@ -10,7 +10,7 @@ public class BuzzApiClient extends BaseApiClient {
         super(user);
     }
 
-    public CreatePostClient createPost(String text) {
+    public CreatePostClient getCreatePostClient(String text) {
         return new CreatePostClient(context, text);
     }
 

@@ -1,19 +1,30 @@
 package com.kate.project.web.entities;
 
 import com.kate.project.api.enums.UserRole;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class User {
-    private String username;
-    private String password;
-    private Integer userId;
-    private UserRole userRole;
+    private final String username;
+    private final String password;
+    private final Integer userId;
+    private final UserRole userRole;
 
-    public User(String username, String password) {
+    public User(String username, String password, Integer userId, UserRole userRole) {
+        if (userRole == null) {
+            throw new IllegalArgumentException("UserRole must not be null");
+        }
         this.username = username;
         this.password = password;
+        this.userId = userId;
+        this.userRole = userRole;
+    }
+
+    public User(String username, String password, UserRole userRole) {
+        this(username, password, null, userRole);
+    }
+
+    public User(Boolean isAdmin) {
+        this(null, null, null, isAdmin ? UserRole.ADMIN : UserRole.ESS);
     }
 }

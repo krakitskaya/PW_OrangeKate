@@ -10,16 +10,8 @@ import com.kate.project.web.entities.User;
 public class UserHelper {
     private static final ApiClientFactory apiClientFactory = new ApiClientFactory();
 
-    public static User createAdminUserViaApi(){
-        return createUserViaApi(true);
-    }
-
-    public static User createEssUserViaApi(){
-        return createUserViaApi(false);
-    }
-
-    private static User createUserViaApi(boolean isAdmin) {
-        UserRequestDto requestDto = UserRequestFactory.createUserRequestDto(isAdmin);
+    private static User createUserViaApi(User user) {
+        UserRequestDto requestDto = UserRequestFactory.createUserRequestDtoFromUser(user);
         CreatedUserDto responseDto = apiClientFactory
                 .getUserAdminApiClient()
                 .getCreateUserClient(requestDto)
@@ -31,6 +23,14 @@ public class UserHelper {
                 responseDto.getId(),
                 UserRole.fromRoleId(responseDto.getUserRole().getId())
         );
+    }
+
+    public static User createAdminUserViaApi() {
+        return createUserViaApi(new User(true));
+    }
+
+    public static User createEssUserViaApi() {
+        return createUserViaApi(new User(false));
     }
 
     public static void deleteUserViaApi(User user) {

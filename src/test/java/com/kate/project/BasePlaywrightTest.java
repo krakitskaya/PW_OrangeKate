@@ -1,10 +1,8 @@
 package com.kate.project;
 
-import com.kate.project.factory.ApiClientFactory;
-import com.kate.project.helpers.Config;
-import com.kate.project.helpers.LoginHelper;
+import com.kate.project.api.Config;
+import com.kate.project.web.helpers.LoginHelper;
 import com.kate.project.utils.PlaywrightUtils;
-import com.kate.project.web.entities.User;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
@@ -48,10 +46,6 @@ public class BasePlaywrightTest {
 
     protected LoginHelper getLoginHelper() {
         return loginHelper;
-    }
-
-    protected ApiClientFactory getApiClientFactoryFor(User user) {
-        return new ApiClientFactory(user);
     }
 
     @AfterEach

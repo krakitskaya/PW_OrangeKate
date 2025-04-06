@@ -9,10 +9,8 @@ public class BuzzHelper implements ResponseVerifier {
     public static int createPostApi(ApiClientFactory factory, String text) {
         return factory
                 .getBuzzApiClient()
-                .createPost(text)
-                .send()
-                .jsonPath()
-                .getInt("data.post.id");
+                .getCreatePostClient(text)
+                .sendAndExtractPostId();
     }
 
     public static int createPostApi(User user, String text) {
