@@ -7,17 +7,15 @@ import com.kate.project.web.entities.User;
 
 public class BuzzHelper implements ResponseVerifier {
 
-    public static int createPostApi(ApiClientFactory factory, String text) {
-        return factory
+    public static int createPostApi(User user, String text) {
+        return new ApiClientFactory(user)
                 .getBuzzApiClient()
                 .createPostAndVerifySuccess(new BuzzPostDto(text));
     }
 
-    public static int createPostApi(User user, String text) {
-        return createPostApi(new ApiClientFactory(user), text);
-    }
-
     public static int createPostApi(String text) {
-        return createPostApi(new ApiClientFactory(), text);
+        return new ApiClientFactory()
+                .getBuzzApiClient()
+                .createPostAndVerifySuccess(new BuzzPostDto(text));
     }
 }

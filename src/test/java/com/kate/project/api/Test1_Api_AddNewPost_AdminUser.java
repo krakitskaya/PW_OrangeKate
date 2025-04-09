@@ -12,7 +12,7 @@ public class Test1_Api_AddNewPost_AdminUser extends BaseApiTest {
 
     @Test
     public void addNewPostApi() {
-        BuzzHelper.createPostApi(defaultApiClientFactory, postText);
+        BuzzHelper.createPostApi(postText);
 
         assertTrue(defaultApiClientFactory.getBuzzApiClient().getPosts().stream()
                 .anyMatch(post -> postText.equals(post.getText())));
