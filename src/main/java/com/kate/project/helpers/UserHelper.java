@@ -14,8 +14,7 @@ public class UserHelper {
         UserRequestDto requestDto = UserRequestFactory.createUserRequestDtoFromUser(user);
         CreatedUserDto responseDto = apiClientFactory
                 .getUserAdminApiClient()
-                .getCreateUserClient(requestDto)
-                .sendAndExtractUser();
+                .createUserAndVerifySuccess(requestDto);
 
         return new User(
                 requestDto.getUsername(),
@@ -36,7 +35,6 @@ public class UserHelper {
     public static void deleteUserViaApi(User user) {
         apiClientFactory
                 .getUserAdminApiClient()
-                .getDeleteUserClient(user.getUserId())
-                .sendAndVerifySuccess();
+                .deleteUserAndVerifySuccess(user.getUserId());
     }
 }
