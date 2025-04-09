@@ -6,6 +6,7 @@ import com.kate.project.api.interfaces.ResponseVerifier;
 import com.kate.project.web.entities.User;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 import java.util.List;
 import java.util.Map;
@@ -20,38 +21,36 @@ public class BuzzApiClient extends BaseApiClient implements ResponseVerifier {
         super(user);
     }
 
-    public Response createPost(BuzzPostDto buzzPostDto) {
-        return context.newRequest()
-                .withBody(buzzPostDto)
-                .send(Method.POST, CREATE_POST_URL);
+    public Response createPost(BuzzPostDto dto) {
+        RequestSpecification spec = ApiRequestBuilder.withBody(newRequest(), dto);
+        return send(Method.POST, CREATE_POST_URL, spec);
     }
 
-    public int createPostAndVerifySuccess(BuzzPostDto buzzPostDto) {
-        Response response = createPost(buzzPostDto);
+    public int createPostAndVerifySuccess(BuzzPostDto dto) {
+        Response response = createPost(dto);
         verifySuccess(response);
         return response.jsonPath().getInt("data.post.id");
     }
 
     public Response deletePost(int postId) {
-        return context.newRequest().send(Method.DELETE, DELETE_POST_URL + postId);
+        return send(Method.DELETE, DELETE_POST_URL + postId, newRequest());
     }
 
     public void deletePostAndVerifySuccess(int postId) {
         verifySuccess(deletePost(postId));
     }
 
-    public List<BuzzPostDto> getPosts() {
-        return getPosts(10, 0, "DESC", "share.createdAtUtc");
-    }
-
     public List<BuzzPostDto> getPosts(Integer limit, Integer offset, String sortOrder, String sortField) {
-        ApiRequestBuilder builder = context.newRequest(Method.GET, GET_POSTS_URL);
-        if (limit != null) builder.withQueryParam("limit", limit);
-        if (offset != null) builder.withQueryParam("offset", offset);
-        if (sortOrder != null) builder.withQueryParam("sortOrder", sortOrder);
-        if (sortField != null) builder.withQueryParam("sortField", sortField);
-        Response response = builder.send();
+        RequestSpecification spec = newRequest();
+
+        if (limit != null) spec = ApiRequestBuilder.withQueryParam(spec, "limit", limit);
+        if (offset != null) spec = ApiRequestBuilder.withQueryParam(spec, "offset", offset);
+        if (sortOrder != null) spec = ApiRequestBuilder.withQueryParam(spec, "sortOrder", sortOrder);
+        if (sortField != null) spec = ApiRequestBuilder.withQueryParam(spec, "sortField", sortField);
+
+        Response response = send(Method.GET, GET_POSTS_URL, spec);
         verifySuccess(response);
+
         List<Map<String, Object>> rawData = response.jsonPath().getList("data");
 
         return rawData.stream()
@@ -60,5 +59,9 @@ public class BuzzApiClient extends BaseApiClient implements ResponseVerifier {
                         (String) item.getOrDefault("type", "text")
                 ))
                 .toList();
+    }
+
+    public List<BuzzPostDto> getPosts() {
+        return getPosts(10, 0, "DESC", "share.createdAtUtc");
     }
 }

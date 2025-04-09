@@ -1,11 +1,12 @@
 package com.kate.project.api.clients;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kate.project.api.ApiContext;
+import com.kate.project.api.ApiRequestBuilder;
 import com.kate.project.api.Config;
 import com.kate.project.api.enums.UserRole;
 import com.kate.project.web.entities.User;
+import io.restassured.http.Method;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,12 +15,24 @@ import static io.restassured.RestAssured.given;
 
 public abstract class BaseApiClient {
     protected static final String REST_BASE_URL = Config.get("BASE_URL");
-    protected final ApiContext context;
+    protected final String sessionCookie;
 
     protected BaseApiClient(User user) {
-        String sessionCookie = getCookieAfterLogin(user);
-        ObjectMapper objectMapper = new ObjectMapper();
-        this.context = new ApiContext(REST_BASE_URL + "/api/v2", sessionCookie, objectMapper);
+        this.sessionCookie = getCookieAfterLogin(user);
+    }
+
+    protected RequestSpecification newRequest() {
+        return ApiRequestBuilder.start(REST_BASE_URL + "/api/v2", sessionCookie);
+    }
+
+    protected Response send(Method method, String endpoint, RequestSpecification spec) {
+        return switch (method) {
+            case POST -> spec.post(endpoint);
+            case PUT -> spec.put(endpoint);
+            case DELETE -> spec.delete(endpoint);
+            case GET -> spec.get(endpoint);
+            default -> throw new IllegalArgumentException("Unsupported HTTP method");
+        };
     }
 
     private static String getCookieAfterLogin() {
@@ -29,18 +42,14 @@ public abstract class BaseApiClient {
 
     private static String getCookieAfterLogin(User user) {
         if (user == null) return getCookieAfterLogin();
-        
+
         Response responseForLoginCall = given().baseUri(REST_BASE_URL).log().all().get("auth/login");
         String html = responseForLoginCall.getBody().asString();
 
-        // Parse HTML with Jsoup
         Document doc = Jsoup.parse(html);
-
-        // Extract token from `auth-login` tag
         Element authLogin = doc.selectFirst("auth-login");
         String token = authLogin != null ? authLogin.attr(":token").replaceAll("[\"']", "").replaceAll("^\"|\"$", "") : "Token not found";
         System.out.println("Extracted Auth Token: " + token);
-
 
         String sessionCookie = responseForLoginCall.getCookie("orangehrm");
         System.out.println("Extracted Cookie: " + sessionCookie);

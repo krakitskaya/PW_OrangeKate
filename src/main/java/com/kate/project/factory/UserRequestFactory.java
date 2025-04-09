@@ -8,7 +8,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 public class UserRequestFactory {
 
-    private static final Integer HARDCODED_EMPLOYEE_NUMBER = 1;
+    private static final Integer HARDCODED_EMPLOYEE_NUMBER = 7;
 
     public static UserRequestDto createUserRequestDtoFromUser(User user) {
         UserRequestDto dto = new UserRequestDto();
