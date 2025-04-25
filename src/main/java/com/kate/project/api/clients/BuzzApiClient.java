@@ -17,31 +17,35 @@ public class BuzzApiClient extends BaseApiClient implements ResponseVerifier {
     public static final String DELETE_POST_URL = BASE_BUZZ_URL + "/shares/";
     public static final String GET_POSTS_URL = BASE_BUZZ_URL + "/feed";
 
-    public BuzzApiClient(User user) {
-        super(user);
+    public BuzzApiClient() {
+        super();
     }
 
-    public Response createPost(BuzzPostDto dto) {
-        RequestSpecification spec = ApiRequestBuilder.withBody(newRequest(), dto);
+    public Response createPost(BuzzPostDto dto, User user) {
+        RequestSpecification spec = ApiRequestBuilder.withBody(newRequest(user), dto);
         return send(Method.POST, CREATE_POST_URL, spec);
     }
 
-    public int createPostAndVerifySuccess(BuzzPostDto dto) {
-        Response response = createPost(dto);
+    public int createPostAndVerifySuccess(BuzzPostDto dto, User user) {
+        Response response = createPost(dto, user);
         verifySuccess(response);
         return response.jsonPath().getInt("data.post.id");
     }
 
-    public Response deletePost(int postId) {
-        return send(Method.DELETE, DELETE_POST_URL + postId, newRequest());
+    public Response deletePost(int postId, User user) {
+        return send(Method.DELETE, DELETE_POST_URL + postId, newRequest(user));
     }
 
-    public void deletePostAndVerifySuccess(int postId) {
-        verifySuccess(deletePost(postId));
+    public void deletePostAndVerifySuccess(int postId, User user) {
+        verifySuccess(deletePost(postId, user));
     }
 
-    public List<BuzzPostDto> getPosts(Integer limit, Integer offset, String sortOrder, String sortField) {
-        RequestSpecification spec = newRequest();
+    public List<BuzzPostDto> getPosts(User user) {
+        return getPosts(10, 0, "DESC", "share.createdAtUtc", user);
+    }
+
+    public List<BuzzPostDto> getPosts(Integer limit, Integer offset, String sortOrder, String sortField, User user) {
+        RequestSpecification spec = newRequest(user);
 
         if (limit != null) spec = ApiRequestBuilder.withQueryParam(spec, "limit", limit);
         if (offset != null) spec = ApiRequestBuilder.withQueryParam(spec, "offset", offset);
@@ -59,9 +63,5 @@ public class BuzzApiClient extends BaseApiClient implements ResponseVerifier {
                         (String) item.getOrDefault("type", "text")
                 ))
                 .toList();
-    }
-
-    public List<BuzzPostDto> getPosts() {
-        return getPosts(10, 0, "DESC", "share.createdAtUtc");
     }
 }

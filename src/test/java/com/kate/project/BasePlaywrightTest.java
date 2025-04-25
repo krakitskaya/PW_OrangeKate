@@ -1,8 +1,8 @@
 package com.kate.project;
 
-import com.kate.project.api.Config;
+import com.kate.project.common.Config;
 import com.kate.project.web.helpers.LoginHelper;
-import com.kate.project.utils.PlaywrightUtils;
+import com.kate.project.web.utils.PlaywrightUtils;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;

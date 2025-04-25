@@ -18,17 +18,17 @@ public class UserAdminApiClient extends BaseApiClient implements ResponseVerifie
     public static final String BASE_USER_ADMIN_URL = "/admin/users";
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public UserAdminApiClient(User user) {
-        super(user);
+    public UserAdminApiClient() {
+        super();
     }
 
-    public Response createUser(UserRequestDto userRequestDto) {
-        RequestSpecification spec = ApiRequestBuilder.withBody(newRequest(), userRequestDto);
+    public Response createUser(UserRequestDto userRequestDto, User user) {
+        RequestSpecification spec = ApiRequestBuilder.withBody(newRequest(user), userRequestDto);
         return send(Method.POST, BASE_USER_ADMIN_URL, spec);
     }
 
-    public CreatedUserDto createUserAndVerifySuccess(UserRequestDto userRequestDto) {
-        Response response = createUser(userRequestDto);
+    public CreatedUserDto createUserAndVerifySuccess(UserRequestDto userRequestDto, User user) {
+        Response response = createUser(userRequestDto, user);
         verifySuccess(response);
         JsonNode dataNode = objectMapper.valueToTree(response.jsonPath().get("data"));
         try {
@@ -38,13 +38,13 @@ public class UserAdminApiClient extends BaseApiClient implements ResponseVerifie
         }
     }
 
-    public Response deleteUser(Integer userId) {
+    public Response deleteUser(Integer userId, User user) {
         Map<String, List<Integer>> body = Map.of("ids", List.of(userId));
-        RequestSpecification spec = ApiRequestBuilder.withBody(newRequest(), body);
+        RequestSpecification spec = ApiRequestBuilder.withBody(newRequest(user), body);
         return send(Method.DELETE, BASE_USER_ADMIN_URL, spec);
     }
 
-    public void deleteUserAndVerifySuccess(Integer userId) {
-        verifySuccess(deleteUser(userId));
+    public void deleteUserAndVerifySuccess(Integer userId, User user) {
+        verifySuccess(deleteUser(userId, user));
     }
 }

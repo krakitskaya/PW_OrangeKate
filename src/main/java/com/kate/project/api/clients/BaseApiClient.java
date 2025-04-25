@@ -1,8 +1,7 @@
 package com.kate.project.api.clients;
 
 import com.kate.project.api.ApiRequestBuilder;
-import com.kate.project.api.Config;
-import com.kate.project.api.enums.UserRole;
+import com.kate.project.common.Config;
 import com.kate.project.web.entities.User;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
@@ -11,18 +10,19 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static com.kate.project.common.Users.ADMIN_USER;
 import static io.restassured.RestAssured.given;
 
 public abstract class BaseApiClient {
     protected static final String REST_BASE_URL = Config.get("BASE_URL");
-    protected final String sessionCookie;
+    private static final Map<String, String> sessionCookieCache = new ConcurrentHashMap<>();
 
-    protected BaseApiClient(User user) {
-        this.sessionCookie = getCookieAfterLogin(user);
-    }
-
-    protected RequestSpecification newRequest() {
-        return ApiRequestBuilder.start(REST_BASE_URL + "/api/v2", sessionCookie);
+    protected RequestSpecification newRequest(User user) {
+        String cookie = getCookieAfterLogin(user);
+        return ApiRequestBuilder.start(REST_BASE_URL + "/api/v2", cookie);
     }
 
     protected Response send(Method method, String endpoint, RequestSpecification spec) {
@@ -36,36 +36,32 @@ public abstract class BaseApiClient {
     }
 
     private static String getCookieAfterLogin() {
-        User admin = new User(Config.get("adminUsername"), Config.get("adminPassword"), UserRole.ADMIN);
-        return getCookieAfterLogin(admin);
+        return getCookieAfterLogin(ADMIN_USER);
     }
 
     private static String getCookieAfterLogin(User user) {
         if (user == null) return getCookieAfterLogin();
 
-        Response responseForLoginCall = given().baseUri(REST_BASE_URL).log().all().get("auth/login");
-        String html = responseForLoginCall.getBody().asString();
+        return sessionCookieCache.computeIfAbsent(user.getUsername(), username -> {
+            Response responseForLoginCall = given().baseUri(REST_BASE_URL).log().all().get("auth/login");
+            String html = responseForLoginCall.getBody().asString();
 
-        Document doc = Jsoup.parse(html);
-        Element authLogin = doc.selectFirst("auth-login");
-        String token = authLogin != null ? authLogin.attr(":token").replaceAll("[\"']", "").replaceAll("^\"|\"$", "") : "Token not found";
-        System.out.println("Extracted Auth Token: " + token);
+            Document doc = Jsoup.parse(html);
+            Element authLogin = doc.selectFirst("auth-login");
+            String token = authLogin != null ? authLogin.attr(":token").replaceAll("[\"']", "").replaceAll("^\"|\"$", "") : "Token not found";
 
-        String sessionCookie = responseForLoginCall.getCookie("orangehrm");
-        System.out.println("Extracted Cookie: " + sessionCookie);
+            String sessionCookie = responseForLoginCall.getCookie("orangehrm");
 
-        Response responseForAuthCall = given().baseUri(REST_BASE_URL)
-                .contentType("application/x-www-form-urlencoded")
-                .formParam("_token", token)
-                .formParam("username", user.getUsername())
-                .formParam("password", user.getPassword())
-                .cookie("orangehrm", sessionCookie)
-                .log().all()
-                .post("auth/validate");
+            Response responseForAuthCall = given().baseUri(REST_BASE_URL)
+                    .contentType("application/x-www-form-urlencoded")
+                    .formParam("_token", token)
+                    .formParam("username", user.getUsername())
+                    .formParam("password", user.getPassword())
+                    .cookie("orangehrm", sessionCookie)
+                    .log().all()
+                    .post("auth/validate");
 
-        String sessionCookieAfterLogin = responseForAuthCall.getCookie("orangehrm");
-
-        System.out.println("Extracted Cookie: " + sessionCookieAfterLogin);
-        return sessionCookieAfterLogin;
+            return responseForAuthCall.getCookie("orangehrm");
+        });
     }
 }

@@ -1,9 +1,11 @@
 package com.kate.project.api;
 
-import com.kate.project.helpers.BuzzHelper;
+import com.kate.project.common.helpers.BuzzHelper;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
+
+import static com.kate.project.common.Users.ADMIN_USER;
 
 public class Test2_Api_DeleteNewPost_AdminUser extends BaseApiTest {
     private static final String postText = UUID.randomUUID().toString();
@@ -14,6 +16,6 @@ public class Test2_Api_DeleteNewPost_AdminUser extends BaseApiTest {
 
         defaultApiClientFactory
                 .getBuzzApiClient()
-                .deletePostAndVerifySuccess(postId);
+                .deletePostAndVerifySuccess(postId, ADMIN_USER);
     }
 }

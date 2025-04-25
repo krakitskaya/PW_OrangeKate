@@ -1,4 +1,4 @@
-package com.kate.project.api;
+package com.kate.project.common;
 
 import java.io.FileInputStream;
 import java.io.IOException;

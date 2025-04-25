@@ -1,7 +1,7 @@
 package com.kate.project.api;
 
-import com.kate.project.helpers.BuzzHelper;
-import com.kate.project.helpers.UserHelper;
+import com.kate.project.common.helpers.BuzzHelper;
+import com.kate.project.common.helpers.UserHelper;
 import com.kate.project.web.entities.User;
 import org.junit.jupiter.api.Test;
 

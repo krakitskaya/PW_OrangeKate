@@ -1,6 +1,6 @@
 package com.kate.project.web.helpers;
 
-import com.kate.project.api.Config;
+import com.kate.project.common.Config;
 import com.kate.project.api.enums.UserRole;
 import com.kate.project.web.entities.User;
 import com.kate.project.web.pages.DashboardPage;

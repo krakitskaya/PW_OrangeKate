@@ -65,12 +65,13 @@ public class BuzzPage extends BasePage {
 
     public List<BuzzPostTile> getBuzzPostTiles() {
         List<Locator> buzzPostTiles = page.locator("div[class*='orangehrm-buzz-newsfeed-posts'] div[class*='white'][class*='orangehrm-buzz']").all();
-        ArrayList<BuzzPostTile> buzzPostTilesToReturn = new ArrayList<>();
-        buzzPostTiles.forEach(buzzPostTile -> {
-            String postText = buzzPostTile.locator("p.orangehrm-buzz-post-body-text").textContent();
+        List<BuzzPostTile> buzzPostTilesToReturn = new ArrayList<>();
+        for (Locator buzzPostTile : buzzPostTiles) {
+            Locator textLocator = buzzPostTile.locator("p.orangehrm-buzz-post-body-text");
+            String postText = textLocator.count() > 0 ? textLocator.textContent() : "";
             Locator deleteButton = buzzPostTile.locator("i.oxd-icon.bi-three-dots");
             buzzPostTilesToReturn.add(new BuzzPostTile(postText, deleteButton));
-        });
+        }
         return buzzPostTilesToReturn;
     }
 }

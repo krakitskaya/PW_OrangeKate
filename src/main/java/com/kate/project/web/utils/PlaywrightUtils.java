@@ -1,4 +1,4 @@
-package com.kate.project.utils;
+package com.kate.project.web.utils;
 
 import com.microsoft.playwright.*;
 import lombok.Getter;

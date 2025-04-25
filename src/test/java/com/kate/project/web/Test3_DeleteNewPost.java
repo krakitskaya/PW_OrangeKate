@@ -1,7 +1,7 @@
 package com.kate.project.web;
 
 import com.kate.project.BasePlaywrightTest;
-import com.kate.project.helpers.BuzzHelper;
+import com.kate.project.common.helpers.BuzzHelper;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

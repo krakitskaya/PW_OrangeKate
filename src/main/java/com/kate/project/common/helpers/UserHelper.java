@@ -1,11 +1,13 @@
-package com.kate.project.helpers;
+package com.kate.project.common.helpers;
 
 import com.kate.project.api.dto.CreatedUserDto;
 import com.kate.project.api.dto.UserRequestDto;
 import com.kate.project.api.enums.UserRole;
-import com.kate.project.factory.ApiClientFactory;
-import com.kate.project.factory.UserRequestFactory;
+import com.kate.project.api.factory.ApiClientFactory;
+import com.kate.project.api.factory.UserRequestFactory;
 import com.kate.project.web.entities.User;
+
+import static com.kate.project.common.Users.ADMIN_USER;
 
 public class UserHelper {
     private static final ApiClientFactory apiClientFactory = new ApiClientFactory();
@@ -14,7 +16,7 @@ public class UserHelper {
         UserRequestDto requestDto = UserRequestFactory.createUserRequestDtoFromUser(user);
         CreatedUserDto responseDto = apiClientFactory
                 .getUserAdminApiClient()
-                .createUserAndVerifySuccess(requestDto);
+                .createUserAndVerifySuccess(requestDto, ADMIN_USER);
 
         return new User(
                 requestDto.getUsername(),
@@ -35,6 +37,6 @@ public class UserHelper {
     public static void deleteUserViaApi(User user) {
         apiClientFactory
                 .getUserAdminApiClient()
-                .deleteUserAndVerifySuccess(user.getUserId());
+                .deleteUserAndVerifySuccess(user.getUserId(), ADMIN_USER);
     }
 }
