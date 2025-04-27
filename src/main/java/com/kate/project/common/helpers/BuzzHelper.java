@@ -9,9 +9,12 @@ import static com.kate.project.common.Users.ADMIN_USER;
 public class BuzzHelper {
 
     public static int createPostApi(User user, String text) {
-        return new ApiClientFactory()
+        var response = new ApiClientFactory()
                 .getBuzzApiClient()
-                .createPostAndVerifySuccess(new BuzzPostDto(text), user);
+                .createPost(new BuzzPostDto(text), user);
+
+        response.assertSuccess();
+        return response.body();
     }
 
     public static int createPostApi(String text) {

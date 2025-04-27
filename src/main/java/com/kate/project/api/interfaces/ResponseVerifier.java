@@ -1,34 +1,43 @@
 package com.kate.project.api.interfaces;
 
+import com.kate.project.api.ApiResponse;
+import com.kate.project.api.ErrorResponse;
 import io.restassured.response.Response;
 
-public interface ResponseVerifier  {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-    default void verifySuccess(Response response) {
-        response.then().log().body().statusCode(200);
+public interface ResponseVerifier {
+
+    default void verifyStatus(Response response, int statusCode) {
+        response.then().log().body().statusCode(statusCode);
     }
 
     default void verifyUnauthorized(Response response) {
-        response.then().log().body().statusCode(401);
+        verifyStatus(response, 401);
     }
 
     default void verifyForbidden(Response response) {
-        response.then().log().body().statusCode(403);
+        verifyStatus(response, 403);
     }
 
     default void verifyBadRequest(Response response) {
-        response.then().log().body().statusCode(400);
+        verifyStatus(response, 400);
     }
 
     default void verifyNotFound(Response response) {
-        response.then().log().body().statusCode(404);
+        verifyStatus(response, 404);
     }
 
     default void verifyConflict(Response response) {
-        response.then().log().body().statusCode(409);
+        verifyStatus(response, 409);
     }
 
-    default void verifyCustomStatus(Response response, int expectedStatus) {
-        response.then().log().body().statusCode(expectedStatus);
+    default void verifyError(ApiResponse<?> apiResponse, int expectedStatus, String expectedMessage) {
+        verifyStatus(apiResponse.originalResponse(), expectedStatus);
+
+        ErrorResponse error = apiResponse.errorResponse();
+        assertNotNull(error, "ErrorResponse should not be null");
+        assertEquals(expectedMessage, error.message(), "Error message mismatch");
     }
 }

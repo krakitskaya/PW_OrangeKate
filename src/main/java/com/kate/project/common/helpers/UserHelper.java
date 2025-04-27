@@ -1,6 +1,5 @@
 package com.kate.project.common.helpers;
 
-import com.kate.project.api.dto.CreatedUserDto;
 import com.kate.project.api.dto.UserRequestDto;
 import com.kate.project.api.enums.UserRole;
 import com.kate.project.api.factory.ApiClientFactory;
@@ -14,10 +13,13 @@ public class UserHelper {
 
     private static User createUserViaApi(User user) {
         UserRequestDto requestDto = UserRequestFactory.createUserRequestDtoFromUser(user);
-        CreatedUserDto responseDto = apiClientFactory
+        var response = apiClientFactory
                 .getUserAdminApiClient()
-                .createUserAndVerifySuccess(requestDto, ADMIN_USER);
+                .createUser(requestDto, ADMIN_USER);
 
+        response.assertSuccess();
+
+        var responseDto = response.body();
         return new User(
                 requestDto.getUsername(),
                 requestDto.getPassword(),
@@ -35,8 +37,9 @@ public class UserHelper {
     }
 
     public static void deleteUserViaApi(User user) {
-        apiClientFactory
+        var response = apiClientFactory
                 .getUserAdminApiClient()
-                .deleteUserAndVerifySuccess(user.getUserId(), ADMIN_USER);
+                .deleteUser(user.getUserId(), ADMIN_USER);
+        response.assertSuccess();
     }
 }

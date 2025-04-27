@@ -16,6 +16,7 @@ public class Test2_Api_DeleteNewPost_AdminUser extends BaseApiTest {
 
         defaultApiClientFactory
                 .getBuzzApiClient()
-                .deletePostAndVerifySuccess(postId, ADMIN_USER);
+                .deletePost(postId, ADMIN_USER)
+                .assertSuccess();
     }
 }
