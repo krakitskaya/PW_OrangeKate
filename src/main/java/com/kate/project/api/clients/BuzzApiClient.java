@@ -1,15 +1,13 @@
 package com.kate.project.api.clients;
 
-import com.kate.project.api.ApiRequestBuilder;
-import com.kate.project.api.ApiResponse;
-import com.kate.project.api.ApiResponseHelper;
+import com.kate.project.api.*;
 import com.kate.project.api.dto.BuzzPostDto;
+import com.kate.project.api.interfaces.HandledResponse;
 import com.kate.project.web.entities.User;
 import io.restassured.http.Method;
 import io.restassured.specification.RequestSpecification;
 
 import java.util.List;
-import java.util.Map;
 
 public class BuzzApiClient extends BaseApiClient {
     public static final String BASE_BUZZ_URL = "/buzz";
@@ -21,7 +19,7 @@ public class BuzzApiClient extends BaseApiClient {
         var spec = ApiRequestBuilder.withBody(newRequest(user), dto);
         var response = send(Method.POST, CREATE_POST_URL, spec);
         Integer postId = parseSuccessBody(response, r -> r.jsonPath().getInt("data.post.id"));
-        return ApiResponseHelper.wrap(response, postId);
+        return new ApiResponse<>(response, postId);
     }
 
     public ApiResponse<Void> deletePost(int postId, User user) {
@@ -29,27 +27,28 @@ public class BuzzApiClient extends BaseApiClient {
     }
 
     public ApiResponse<List<BuzzPostDto>> getPosts(User user) {
-        return getPosts(10, 0, "DESC", "share.createdAtUtc", user);
+        var defaultParams = QueryParams.builder()
+                .limit(10)
+                .offset(0)
+                .sortOrder("DESC")
+                .sortField("share.createdAtUtc")
+                .build();
+
+        return getPosts(defaultParams, user);
     }
 
-    public ApiResponse<List<BuzzPostDto>> getPosts(Integer limit, Integer offset, String sortOrder, String sortField, User user) {
-        RequestSpecification spec = newRequest(user);
+    public ApiResponse<List<BuzzPostDto>> getPosts(QueryParams params, User user) {
+        var handled = getHandledPosts(params, user);
+        return new ApiResponse<>(handled.originalResponse(), handled.body());
+    }
 
-        if (limit != null) spec = ApiRequestBuilder.withQueryParam(spec, "limit", limit);
-        if (offset != null) spec = ApiRequestBuilder.withQueryParam(spec, "offset", offset);
-        if (sortOrder != null) spec = ApiRequestBuilder.withQueryParam(spec, "sortOrder", sortOrder);
-        if (sortField != null) spec = ApiRequestBuilder.withQueryParam(spec, "sortField", sortField);
-
+    public HandledResponse<List<BuzzPostDto>> getHandledPosts(QueryParams params, User user) {
+        RequestSpecification spec = params.applyTo(newRequest(user));
         var response = send(Method.GET, GET_POSTS_URL, spec);
 
-        List<Map<String, Object>> data = response.jsonPath().getList("data");
-        List<BuzzPostDto> posts = data.stream()
-                .map(item -> new BuzzPostDto(
-                        (String) item.get("text"),
-                        (String) item.getOrDefault("type", "text")
-                ))
-                .toList();
-
-        return ApiResponseHelper.wrap(response, posts);
+        return new ListApiResponse<>(response, map -> new BuzzPostDto(
+                (String) map.get("text"),
+                (String) map.getOrDefault("type", "text")
+        ));
     }
 }

@@ -3,7 +3,6 @@ package com.kate.project.api.clients;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kate.project.api.ApiRequestBuilder;
 import com.kate.project.api.ApiResponse;
-import com.kate.project.api.ApiResponseHelper;
 import com.kate.project.api.dto.CreatedUserDto;
 import com.kate.project.api.dto.UserRequestDto;
 import com.kate.project.web.entities.User;
@@ -23,7 +22,7 @@ public class UserAdminApiClient extends BaseApiClient {
         CreatedUserDto createdUser = parseSuccessBody(response, r ->
                 objectMapper.convertValue(r.jsonPath().getMap("data"), CreatedUserDto.class)
         );
-        return ApiResponseHelper.wrap(response, createdUser);
+        return new ApiResponse<>(response, createdUser);
     }
 
     public ApiResponse<Void> deleteUser(Integer userId, User user) {

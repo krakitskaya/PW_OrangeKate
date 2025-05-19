@@ -2,7 +2,6 @@ package com.kate.project.api.clients;
 
 import com.kate.project.api.ApiRequestBuilder;
 import com.kate.project.api.ApiResponse;
-import com.kate.project.api.ApiResponseHelper;
 import com.kate.project.common.Config;
 import com.kate.project.web.entities.User;
 import io.restassured.http.Method;
@@ -40,7 +39,7 @@ public abstract class BaseApiClient {
 
     protected <R> ApiResponse<R> sendAndWrap(Method method, String endpoint, RequestSpecification spec, R body) {
         Response response = send(method, endpoint, spec);
-        return ApiResponseHelper.wrap(response, body);
+        return new ApiResponse<>(response, body);
     }
 
     protected ApiResponse<Void> sendAndWrap(Method method, String endpoint, RequestSpecification spec) {

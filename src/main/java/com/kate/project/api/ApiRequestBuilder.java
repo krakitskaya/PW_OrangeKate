@@ -20,6 +20,7 @@ public class ApiRequestBuilder {
     }
 
     public static RequestSpecification withQueryParam(RequestSpecification spec, String key, Object value) {
+        if (value == null) return spec;
         return spec.queryParam(key, value);
     }
 
